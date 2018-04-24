@@ -22,15 +22,17 @@ class Board {
     let length: Int
     var cells: [[Cell]]
     let numMines = 10
+    var firstTap: Bool
     
     init(length: Int) {
         self.length = length
         self.cells = [[]]
+        self.firstTap = true
     }
     
     func startNewGame() {
         cells = Array(repeating: Array(repeating: Cell(value: 0), count: self.length), count: self.length)
-        self.scrambleMines()
+        self.firstTap = true
     }
     
     func numberAt(row: Int, col: Int) -> Int {
@@ -45,12 +47,26 @@ class Board {
         self.cells[row][col].isRevealed = true
     }
     
-    func scrambleMines() {
+    func scrambleMines(row: Int, col: Int) {
+        var unavailable: [(Int, Int)] = []
+        for r in row-1 ..< row+2 {
+            if r < 0 || r > 9 {
+                continue
+            }
+            for c in col-1 ..< col+2 {
+                if c < 0 || c > 9 {
+                    continue
+                }
+                unavailable.append((r, c))
+            }
+        }
+//        print("\(unavailable)")
+        
         var minesRemaining = self.numMines
         while minesRemaining > 0 {
             let r = Int(arc4random_uniform(UInt32(self.length)))
             let c = Int(arc4random_uniform(UInt32(self.length)))
-            if !self.mineAt(row: r, col: c) {
+            if !self.mineAt(row: r, col: c) && !unavailable.contains(where: {$0 == (r, c)}) {
                 self.setMineAt(row: r, col: c)
                 minesRemaining -= 1
             }

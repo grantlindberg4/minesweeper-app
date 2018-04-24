@@ -83,10 +83,14 @@ class BoardView: UIView {
         let row = Int((tapPoint.y - gridOrigin.y)/d)
         
         if tapOccurredInBounds(row: row, col: col, length: board!.length) {
+            if board!.firstTap {
+                board!.scrambleMines(row: row, col: col)
+                board!.firstTap = false
+            }
             if !board!.isRevealedAt(row: row, col: col) {
                 board!.revealCellAt(row: row, col: col)
-                setNeedsDisplay()
             }
+            setNeedsDisplay()
         }
     }
     
