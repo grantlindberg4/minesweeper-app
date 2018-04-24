@@ -30,14 +30,30 @@
                                     <outletCollection property="gestureRecognizers" destination="cmm-16-J9J" appends="YES" id="TZB-si-Gff"/>
                                 </connections>
                             </view>
+                            <toolbar opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="DGl-0v-FQe">
+                                <rect key="frame" x="0.0" y="623" width="375" height="44"/>
+                                <items>
+                                    <barButtonItem title="New Game" id="vhJ-Hz-Y1q">
+                                        <connections>
+                                            <action selector="newGameButtonPressed:" destination="BYZ-38-t0r" id="EEu-1W-izf"/>
+                                        </connections>
+                                    </barButtonItem>
+                                </items>
+                            </toolbar>
                         </subviews>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
+                            <constraint firstItem="DGl-0v-FQe" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" id="0nf-3F-A8o"/>
+                            <constraint firstItem="DGl-0v-FQe" firstAttribute="bottom" secondItem="6Tk-OE-BBY" secondAttribute="bottom" id="A5Y-O2-TyE"/>
                             <constraint firstItem="nTq-TK-HBM" firstAttribute="centerY" secondItem="6Tk-OE-BBY" secondAttribute="centerY" id="haD-lt-bx0"/>
+                            <constraint firstItem="DGl-0v-FQe" firstAttribute="trailing" secondItem="6Tk-OE-BBY" secondAttribute="trailing" id="rJh-eJ-grx"/>
                             <constraint firstItem="nTq-TK-HBM" firstAttribute="centerX" secondItem="6Tk-OE-BBY" secondAttribute="centerX" id="tIB-nU-WVM"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                     </view>
+                    <connections>
+                        <outlet property="boardView" destination="nTq-TK-HBM" id="68s-Hp-Ycb"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
                 <tapGestureRecognizer id="cmm-16-J9J">

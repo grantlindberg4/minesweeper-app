@@ -19,11 +19,16 @@ struct Cell {
 }
 
 class Board {
-    let length = 9
+    let length: Int
     var cells: [[Cell]]
     let numMines = 10
     
-    init() {
+    init(length: Int) {
+        self.length = length
+        self.cells = [[]]
+    }
+    
+    func startNewGame() {
         cells = Array(repeating: Array(repeating: Cell(value: 0), count: self.length), count: self.length)
         self.scrambleMines()
     }
