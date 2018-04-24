@@ -53,7 +53,7 @@ class BoardView: UIView {
         
         for row in 0 ..< board!.length {
             for col in 0 ..< board!.length {
-                let number = board!.cells[row][col]
+                let number = board!.numberAt(row: row, col: col)
                 let text = "\(number)" as NSString
                 let textSize = text.size(withAttributes: attributes)
                 let x = gridOrigin.x + CGFloat(col)*d + 0.5*(d - textSize.width)
