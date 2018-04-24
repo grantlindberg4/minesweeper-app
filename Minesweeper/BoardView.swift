@@ -87,8 +87,8 @@ class BoardView: UIView {
                 board!.generateBoardFrom(row: row, col: col)
                 board!.firstTap = false
             }
-            if !board!.isRevealedAt(row: row, col: col) {
-                board!.revealCellAt(row: row, col: col)
+            if !board!.mineAt(row: row, col: col) {
+                board!.revealCellsAround(row: row, col: col)
             }
             setNeedsDisplay()
         }

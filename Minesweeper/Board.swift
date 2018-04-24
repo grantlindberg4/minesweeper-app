@@ -14,7 +14,7 @@ struct Cell {
     
     init(value: Int) {
         self.value = value
-        self.isRevealed = true
+        self.isRevealed = false
     }
 }
 
@@ -80,6 +80,25 @@ class Board {
     
     func revealCellAt(row: Int, col: Int) {
         self.cells[row][col].isRevealed = true
+    }
+    
+    func revealCellsAround(row: Int, col: Int) {
+        for r in row-1 ..< row+2 {
+            if r < 0 || r >= self.length {
+                continue
+            }
+            for c in col-1 ..< col+2 {
+                if c < 0 || c >= self.length {
+                    continue
+                }
+                if !self.isRevealedAt(row: r, col: c) && !self.mineAt(row: r, col: c) {
+                    self.revealCellAt(row: r, col: c)
+                    if self.numMinesAround(row: r, col: c) == 0 {
+                        self.revealCellsAround(row: r, col: c)
+                    }
+                }
+            }
+        }
     }
     
     func scrambleMines(row: Int, col: Int) {
