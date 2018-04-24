@@ -35,6 +35,41 @@ class Board {
         self.firstTap = true
     }
     
+    func generateBoardFrom(row: Int, col: Int) {
+        self.scrambleMines(row: row, col: col)
+        self.fillRemainingSpaces()
+    }
+    
+    func fillRemainingSpaces() {
+        for row in 0 ..< self.length {
+            for col in 0 ..< self.length {
+                if self.mineAt(row: row, col: col) {
+                    continue
+                }
+                self.cells[row][col].value = self.numMinesAround(row: row, col: col)
+            }
+        }
+    }
+    
+    func numMinesAround(row: Int, col: Int) -> Int {
+        var count = 0
+        for r in row-1 ..< row+2 {
+            if r < 0 || r >= self.length {
+                continue
+            }
+            for c in col-1 ..< col+2 {
+                if c < 0 || c >= self.length {
+                    continue
+                }
+                if mineAt(row: r, col: c) {
+                    count += 1
+                }
+            }
+        }
+        
+        return count
+    }
+    
     func numberAt(row: Int, col: Int) -> Int {
         return self.cells[row][col].value
     }
@@ -50,11 +85,11 @@ class Board {
     func scrambleMines(row: Int, col: Int) {
         var unavailable: [(Int, Int)] = []
         for r in row-1 ..< row+2 {
-            if r < 0 || r > 9 {
+            if r < 0 || r >= self.length {
                 continue
             }
             for c in col-1 ..< col+2 {
-                if c < 0 || c > 9 {
+                if c < 0 || c >= self.length {
                     continue
                 }
                 unavailable.append((r, c))
