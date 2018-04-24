@@ -21,10 +21,14 @@
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="nTq-TK-HBM" userLabel="BoardView" customClass="BoardView" customModule="Minesweeper" customModuleProvider="target">
                                 <rect key="frame" x="47" y="203.5" width="280" height="280"/>
                                 <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <gestureRecognizers/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="280" id="8Pc-PD-Jpd"/>
                                     <constraint firstAttribute="width" constant="280" id="xxc-wV-icU"/>
                                 </constraints>
+                                <connections>
+                                    <outletCollection property="gestureRecognizers" destination="cmm-16-J9J" appends="YES" id="TZB-si-Gff"/>
+                                </connections>
                             </view>
                         </subviews>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -36,6 +40,11 @@
                     </view>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
+                <tapGestureRecognizer id="cmm-16-J9J">
+                    <connections>
+                        <action selector="handleTap:" destination="nTq-TK-HBM" id="CP2-Hg-kaM"/>
+                    </connections>
+                </tapGestureRecognizer>
             </objects>
         </scene>
     </scenes>

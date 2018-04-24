@@ -10,9 +10,11 @@ import Foundation
 
 struct Cell {
     var value: Int
+    var isRevealed: Bool
     
     init(value: Int) {
         self.value = value
+        self.isRevealed = false
     }
 }
 
@@ -26,5 +28,13 @@ class Board {
     
     func numberAt(row: Int, col: Int) -> Int {
         return self.cells[row][col].value
+    }
+    
+    func isRevealedAt(row: Int, col: Int) -> Bool {
+        return self.cells[row][col].isRevealed
+    }
+    
+    func revealCellAt(row: Int, col: Int) {
+        self.cells[row][col].isRevealed = true
     }
 }

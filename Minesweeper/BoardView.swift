@@ -17,7 +17,30 @@ func fontSizeFor(_ string: NSString, fontName: String, targetSize: CGSize) -> CG
     return testFontSize*min(targetSize.width/strSize.width, targetSize.height/strSize.height)
 }
 
+func tapOccurredInBounds(row: Int, col: Int, length: Int) -> Bool {
+    return 0 <= col && col < length && 0 <= row && row < length
+}
+
 class BoardView: UIView {
+    @IBAction func handleTap(_ sender: UIGestureRecognizer) {
+        let tapPoint = sender.location(in: self)
+        let gridSize = (self.bounds.width < self.bounds.height) ? self.bounds.width : self.bounds.height
+        let gridOrigin = CGPoint(x: (self.bounds.width - gridSize)/2, y: (self.bounds.height - gridSize)/2)
+        let d = gridSize/9
+        let col = Int((tapPoint.x - gridOrigin.x)/d)
+        let row = Int((tapPoint.y - gridOrigin.y)/d)
+        
+        let appDelegate = UIApplication.shared.delegate as! AppDelegate
+        let board = appDelegate.board
+        
+        if tapOccurredInBounds(row: row, col: col, length: board!.length) {
+            if !board!.isRevealedAt(row: row, col: col) {
+                board!.revealCellAt(row: row, col: col)
+                setNeedsDisplay()
+            }
+        }
+    }
+    
     override func draw(_ rect: CGRect) {
         // Code referenced and adapted from SudokuView.swift in Project 2: Sudoku
         let appDelegate = UIApplication.shared.delegate as! AppDelegate
@@ -53,6 +76,9 @@ class BoardView: UIView {
         
         for row in 0 ..< board!.length {
             for col in 0 ..< board!.length {
+                if !board!.isRevealedAt(row: row, col: col) {
+                    continue
+                }
                 let number = board!.numberAt(row: row, col: col)
                 let text = "\(number)" as NSString
                 let textSize = text.size(withAttributes: attributes)
