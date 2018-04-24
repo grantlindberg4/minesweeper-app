@@ -21,17 +21,58 @@ func tapOccurredInBounds(row: Int, col: Int, length: Int) -> Bool {
     return 0 <= col && col < length && 0 <= row && row < length
 }
 
+func drawGridLines(length: Int, gridSize: CGFloat, gridOrigin: CGPoint, delta: CGFloat, d: CGFloat) {
+    let context = UIGraphicsGetCurrentContext()
+    context?.setLineWidth(3)
+    UIColor.black.setStroke()
+    context?.stroke(CGRect(x: gridOrigin.x, y: gridOrigin.y, width: gridSize, height: gridSize))
+    
+    for i in 0 ..< length {
+        for j in 0 ..< length {
+            let x = gridOrigin.x + CGFloat(i)*delta + CGFloat(j)*d
+            context?.move(to: CGPoint(x: x, y: gridOrigin.y))
+            context?.addLine(to: CGPoint(x: x, y: gridOrigin.y + gridSize))
+            let y = gridOrigin.y + CGFloat(i)*delta + CGFloat(j)*d
+            context?.move(to: CGPoint(x: gridOrigin.x, y: y))
+            context?.addLine(to: CGPoint(x: gridOrigin.x + gridSize, y: y))
+            context?.strokePath()
+        }
+    }
+}
+
+func drawCells(board: Board?, gridOrigin: CGPoint, d: CGFloat) {
+    let fontName = "Helvetica-Bold"
+    let fontSize = fontSizeFor("0", fontName: fontName, targetSize: CGSize(width: d, height: d))
+    let font = UIFont(name: fontName, size: fontSize)
+    let attributes = [NSAttributedStringKey.font: font!, NSAttributedStringKey.foregroundColor: UIColor.blue]
+    
+    for row in 0 ..< board!.length {
+        for col in 0 ..< board!.length {
+            if !board!.isRevealedAt(row: row, col: col) {
+                continue
+            }
+            let number = board!.numberAt(row: row, col: col)
+            let text = "\(number)" as NSString
+            let textSize = text.size(withAttributes: attributes)
+            let x = gridOrigin.x + CGFloat(col)*d + 0.5*(d - textSize.width)
+            let y = gridOrigin.y + CGFloat(row)*d + 0.5*(d - textSize.height)
+            let textRect = CGRect(x: x, y: y, width: textSize.width, height: textSize.height)
+            text.draw(in: textRect, withAttributes: attributes)
+        }
+    }
+}
+
 class BoardView: UIView {
     @IBAction func handleTap(_ sender: UIGestureRecognizer) {
+        let appDelegate = UIApplication.shared.delegate as! AppDelegate
+        let board = appDelegate.board
+        
         let tapPoint = sender.location(in: self)
         let gridSize = (self.bounds.width < self.bounds.height) ? self.bounds.width : self.bounds.height
         let gridOrigin = CGPoint(x: (self.bounds.width - gridSize)/2, y: (self.bounds.height - gridSize)/2)
-        let d = gridSize/9
+        let d = gridSize/CGFloat(board!.length)
         let col = Int((tapPoint.x - gridOrigin.x)/d)
         let row = Int((tapPoint.y - gridOrigin.y)/d)
-        
-        let appDelegate = UIApplication.shared.delegate as! AppDelegate
-        let board = appDelegate.board
         
         if tapOccurredInBounds(row: row, col: col, length: board!.length) {
             if !board!.isRevealedAt(row: row, col: col) {
@@ -46,47 +87,12 @@ class BoardView: UIView {
         let appDelegate = UIApplication.shared.delegate as! AppDelegate
         let board = appDelegate.board
         
-        let context = UIGraphicsGetCurrentContext()
-        
         let gridSize = (self.bounds.width < self.bounds.height) ? self.bounds.width : self.bounds.height
         let gridOrigin = CGPoint(x: (self.bounds.width - gridSize)/2, y: (self.bounds.height - gridSize)/2)
-        let delta = gridSize/3
-        let d = delta/3
+        let delta = gridSize/CGFloat(board!.length).squareRoot()
+        let d = delta/CGFloat(board!.length).squareRoot()
         
-        context?.setLineWidth(3)
-        UIColor.black.setStroke()
-        context?.stroke(CGRect(x: gridOrigin.x, y: gridOrigin.y, width: gridSize, height: gridSize))
-        
-        for i in 0 ..< board!.length {
-            for j in 0 ..< board!.length {
-                let x = gridOrigin.x + CGFloat(i)*delta + CGFloat(j)*d
-                context?.move(to: CGPoint(x: x, y: gridOrigin.y))
-                context?.addLine(to: CGPoint(x: x, y: gridOrigin.y + gridSize))
-                let y = gridOrigin.y + CGFloat(i)*delta + CGFloat(j)*d
-                context?.move(to: CGPoint(x: gridOrigin.x, y: y))
-                context?.addLine(to: CGPoint(x: gridOrigin.x + gridSize, y: y))
-                context?.strokePath()
-            }
-        }
-        
-        let fontName = "Helvetica-Bold"
-        let fontSize = fontSizeFor("0", fontName: fontName, targetSize: CGSize(width: d, height: d))
-        let font = UIFont(name: fontName, size: fontSize)
-        let attributes = [NSAttributedStringKey.font: font!, NSAttributedStringKey.foregroundColor: UIColor.blue]
-        
-        for row in 0 ..< board!.length {
-            for col in 0 ..< board!.length {
-                if !board!.isRevealedAt(row: row, col: col) {
-                    continue
-                }
-                let number = board!.numberAt(row: row, col: col)
-                let text = "\(number)" as NSString
-                let textSize = text.size(withAttributes: attributes)
-                let x = gridOrigin.x + CGFloat(col)*d + 0.5*(d - textSize.width)
-                let y = gridOrigin.y + CGFloat(row)*d + 0.5*(d - textSize.height)
-                let textRect = CGRect(x: x, y: y, width: textSize.width, height: textSize.height)
-                text.draw(in: textRect, withAttributes: attributes)
-            }
-        }
+        drawGridLines(length: board!.length, gridSize: gridSize, gridOrigin: gridOrigin, delta: delta, d: d)
+        drawCells(board: board, gridOrigin: gridOrigin, d: d)
     }
 }
