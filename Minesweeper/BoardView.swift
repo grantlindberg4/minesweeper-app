@@ -51,8 +51,16 @@ func drawCells(board: Board?, gridOrigin: CGPoint, d: CGFloat) {
             if !board!.isRevealedAt(row: row, col: col) {
                 continue
             }
-            let number = board!.numberAt(row: row, col: col)
-            let text = "\(number)" as NSString
+            
+            let text: NSString
+            if board!.mineAt(row: row, col: col) {
+                text = "M" as NSString
+            }
+            else {
+                let number = board!.numberAt(row: row, col: col)
+                text = "\(number)" as NSString
+            }
+            
             let textSize = text.size(withAttributes: attributes)
             let x = gridOrigin.x + CGFloat(col)*d + 0.5*(d - textSize.width)
             let y = gridOrigin.y + CGFloat(row)*d + 0.5*(d - textSize.height)
