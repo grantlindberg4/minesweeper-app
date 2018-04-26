@@ -41,5 +41,15 @@ extension ViewController {
         alert.addAction(newGameAction)
         self.present(alert, animated: true, completion: nil)
     }
+    
+    func showGameWonAlert() {
+        let alert = UIAlertController(title: "Congratulations!", message: "You have beaten the game!", preferredStyle: .alert)
+        let newGameAction = UIAlertAction(title: "New Game", style: .default) { (action) in
+            self.appDelegate.board?.startNewGame()
+            self.boardView.setNeedsDisplay()
+        }
+        alert.addAction(newGameAction)
+        self.present(alert, animated: true, completion: nil)
+    }
 }
 

@@ -93,6 +93,10 @@ class BoardView: UIView {
             }
             else {
                 board!.revealCellsAround(row: row, col: col)
+                if board!.wonGame() {
+                    let viewController = appDelegate.window!.rootViewController as? ViewController
+                    viewController?.showGameWonAlert()
+                }
             }
             setNeedsDisplay()
         }

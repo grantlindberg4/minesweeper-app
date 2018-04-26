@@ -134,4 +134,16 @@ class Board {
     func setMineAt(row: Int, col: Int) {
         self.cells[row][col].value = -1
     }
+    
+    func wonGame() -> Bool {
+        for r in 0 ..< self.length {
+            for c in 0 ..< self.length {
+                if !self.mineAt(row: r, col: c) && !self.isRevealedAt(row: r, col: c) {
+                    return false
+                }
+            }
+        }
+        
+        return true
+    }
 }
