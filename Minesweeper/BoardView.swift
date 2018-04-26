@@ -116,6 +116,7 @@ class BoardView: UIView {
                 board!.firstTap = false
             }
             if board!.mineAt(row: row, col: col) {
+                board!.revealAllMines()
                 let viewController = appDelegate.window!.rootViewController as? ViewController
                 viewController?.showGameOverAlert()
             }

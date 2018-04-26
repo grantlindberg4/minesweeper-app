@@ -135,6 +135,16 @@ class Board {
         self.cells[row][col].value = -1
     }
     
+    func revealAllMines() {
+        for r in 0 ..< self.length {
+            for c in 0 ..< self.length {
+                if self.mineAt(row: r, col: c) {
+                    self.revealCellAt(row: r, col: c)
+                }
+            }
+        }
+    }
+    
     func wonGame() -> Bool {
         for r in 0 ..< self.length {
             for c in 0 ..< self.length {
