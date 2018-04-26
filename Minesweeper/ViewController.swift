@@ -11,6 +11,7 @@ import UIKit
 class ViewController: UIViewController {
     @IBOutlet weak var boardView: BoardView!
     @IBOutlet weak var movesLabel: UILabel!
+    @IBOutlet weak var timeLabel: UILabel!
     
     let appDelegate = UIApplication.shared.delegate as! AppDelegate
     
@@ -29,6 +30,7 @@ class ViewController: UIViewController {
         let newGameAction = UIAlertAction(title: "New Game", style: .default) { (action) in
             let board = self.appDelegate.board
             board!.startNewGame()
+            board!.timer = nil
             self.updateMoves(moves: 0)
             self.boardView.setNeedsDisplay()
         }
@@ -43,6 +45,7 @@ class ViewController: UIViewController {
         let newGameAction = UIAlertAction(title: "New Game", style: .default) { (action) in
             let board = self.appDelegate.board
             board!.startNewGame()
+            board!.timer = nil
             self.updateMoves(moves: 0)
             self.boardView.setNeedsDisplay()
         }
@@ -55,6 +58,7 @@ class ViewController: UIViewController {
         let newGameAction = UIAlertAction(title: "New Game", style: .default) { (action) in
             let board = self.appDelegate.board
             board!.startNewGame()
+            board!.timer = nil
             self.updateMoves(moves: 0)
             self.boardView.setNeedsDisplay()
         }
@@ -65,6 +69,11 @@ class ViewController: UIViewController {
     func updateMoves(moves: Int) {
         self.movesLabel.text = "Moves: \(moves)"
         self.movesLabel.sizeToFit()
+    }
+    
+    func updateTimeLabel(time: Int) {
+        self.timeLabel.text = "Time: \(time)"
+        self.timeLabel.sizeToFit()
     }
 }
 
