@@ -44,7 +44,17 @@ func drawCells(board: Board?, gridOrigin: CGPoint, d: CGFloat) {
     let fontName = "Helvetica-Bold"
     let fontSize = fontSizeFor("0", fontName: fontName, targetSize: CGSize(width: d, height: d))
     let font = UIFont(name: fontName, size: fontSize)
-    let attributes = [NSAttributedStringKey.font: font!, NSAttributedStringKey.foregroundColor: UIColor.blue]
+    
+    let fixedAttributes = [
+        1: [NSAttributedStringKey.font: font!, NSAttributedStringKey.foregroundColor: UIColor.red],
+        2: [NSAttributedStringKey.font: font!, NSAttributedStringKey.foregroundColor: UIColor.orange],
+        3: [NSAttributedStringKey.font: font!, NSAttributedStringKey.foregroundColor: UIColor.yellow],
+        4: [NSAttributedStringKey.font: font!, NSAttributedStringKey.foregroundColor: UIColor.green],
+        5: [NSAttributedStringKey.font: font!, NSAttributedStringKey.foregroundColor: UIColor.blue],
+        6: [NSAttributedStringKey.font: font!, NSAttributedStringKey.foregroundColor: UIColor.purple],
+        7: [NSAttributedStringKey.font: font!, NSAttributedStringKey.foregroundColor: UIColor.brown],
+        8: [NSAttributedStringKey.font: font!, NSAttributedStringKey.foregroundColor: UIColor.black],
+    ]
     
     for row in 0 ..< board!.length {
         for col in 0 ..< board!.length {
@@ -53,19 +63,37 @@ func drawCells(board: Board?, gridOrigin: CGPoint, d: CGFloat) {
             }
             
             let text: NSString
+            var attributes : [NSAttributedStringKey : NSObject]? = nil
             if board!.mineAt(row: row, col: col) {
-                text = "M" as NSString
+                text = "💥" as NSString
+                let textSize = text.size(withAttributes: attributes)
+                let x = gridOrigin.x + CGFloat(col)*d + 0.5*(d - textSize.width)
+                let y = gridOrigin.y + CGFloat(row)*d + 0.5*(d - textSize.height)
+                let textRect = CGRect(x: x, y: y, width: textSize.width, height: textSize.height)
+                text.draw(in: textRect, withAttributes: attributes)
             }
             else {
                 let number = board!.numberAt(row: row, col: col)
-                text = "\(number)" as NSString
+                if number == 0 {
+                    let x = gridOrigin.x + CGFloat(col)*d
+                    let y = gridOrigin.y + CGFloat(row)*d
+                    let rect = CGRect(
+                        origin: CGPoint(x: x, y: y),
+                        size: CGSize(width: 280/board!.length, height: 280/board!.length)
+                    )
+                    UIColor.darkGray.set()
+                    UIRectFill(rect)
+                }
+                else {
+                    attributes = fixedAttributes[number]
+                    text = "\(number)" as NSString
+                    let textSize = text.size(withAttributes: attributes)
+                    let x = gridOrigin.x + CGFloat(col)*d + 0.5*(d - textSize.width)
+                    let y = gridOrigin.y + CGFloat(row)*d + 0.5*(d - textSize.height)
+                    let textRect = CGRect(x: x, y: y, width: textSize.width, height: textSize.height)
+                    text.draw(in: textRect, withAttributes: attributes)
+                }
             }
-            
-            let textSize = text.size(withAttributes: attributes)
-            let x = gridOrigin.x + CGFloat(col)*d + 0.5*(d - textSize.width)
-            let y = gridOrigin.y + CGFloat(row)*d + 0.5*(d - textSize.height)
-            let textRect = CGRect(x: x, y: y, width: textSize.width, height: textSize.height)
-            text.draw(in: textRect, withAttributes: attributes)
         }
     }
 }
