@@ -87,7 +87,11 @@ class BoardView: UIView {
                 board!.generateBoardFrom(row: row, col: col)
                 board!.firstTap = false
             }
-            if !board!.mineAt(row: row, col: col) {
+            if board!.mineAt(row: row, col: col) {
+                let viewController = appDelegate.window!.rootViewController as? ViewController
+                viewController?.showGameOverAlert()
+            }
+            else {
                 board!.revealCellsAround(row: row, col: col)
             }
             setNeedsDisplay()

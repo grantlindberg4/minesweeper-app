@@ -10,6 +10,7 @@ import UIKit
 
 class ViewController: UIViewController {
     @IBOutlet weak var boardView: BoardView!
+    let appDelegate = UIApplication.shared.delegate as! AppDelegate
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -27,6 +28,18 @@ class ViewController: UIViewController {
         
         board!.startNewGame()
         boardView.setNeedsDisplay()
+    }
+}
+
+extension ViewController {
+    func showGameOverAlert() {
+        let alert = UIAlertController(title: "Game over", message: "You stepped on a mine!", preferredStyle: .alert)
+        let newGameAction = UIAlertAction(title: "New Game", style: .default) { (action) in
+            self.appDelegate.board?.startNewGame()
+            self.boardView.setNeedsDisplay()
+        }
+        alert.addAction(newGameAction)
+        self.present(alert, animated: true, completion: nil)
     }
 }
 
