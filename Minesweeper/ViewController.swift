@@ -10,6 +10,8 @@ import UIKit
 
 class ViewController: UIViewController {
     @IBOutlet weak var boardView: BoardView!
+    @IBOutlet weak var movesLabel: UILabel!
+    
     let appDelegate = UIApplication.shared.delegate as! AppDelegate
     
     override func viewDidLoad() {
@@ -27,6 +29,7 @@ class ViewController: UIViewController {
         let newGameAction = UIAlertAction(title: "New Game", style: .default) { (action) in
             let board = self.appDelegate.board
             board!.startNewGame()
+            self.updateMoves(moves: 0)
             self.boardView.setNeedsDisplay()
         }
         let cancelAction = UIAlertAction(title: "Cancel", style: .cancel)
@@ -40,6 +43,7 @@ class ViewController: UIViewController {
         let newGameAction = UIAlertAction(title: "New Game", style: .default) { (action) in
             let board = self.appDelegate.board
             board!.startNewGame()
+            self.updateMoves(moves: 0)
             self.boardView.setNeedsDisplay()
         }
         alert.addAction(newGameAction)
@@ -51,10 +55,16 @@ class ViewController: UIViewController {
         let newGameAction = UIAlertAction(title: "New Game", style: .default) { (action) in
             let board = self.appDelegate.board
             board!.startNewGame()
+            self.updateMoves(moves: 0)
             self.boardView.setNeedsDisplay()
         }
         alert.addAction(newGameAction)
         self.present(alert, animated: true, completion: nil)
+    }
+    
+    func updateMoves(moves: Int) {
+        self.movesLabel.text = "Moves: \(moves)"
+        self.movesLabel.sizeToFit()
     }
 }
 

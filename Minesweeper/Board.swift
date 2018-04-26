@@ -23,16 +23,19 @@ class Board {
     var cells: [[Cell]]
     let numMines = 10
     var firstTap: Bool
+    var numMoves: Int
     
     init(length: Int) {
         self.length = length
         self.cells = [[]]
         self.firstTap = true
+        self.numMoves = 0
     }
     
     func startNewGame() {
         cells = Array(repeating: Array(repeating: Cell(value: 0), count: self.length), count: self.length)
         self.firstTap = true
+        self.numMoves = 0
     }
     
     func generateBoardFrom(row: Int, col: Int) {
@@ -155,5 +158,9 @@ class Board {
         }
         
         return true
+    }
+    
+    func incrementMoves() {
+        self.numMoves += 1
     }
 }

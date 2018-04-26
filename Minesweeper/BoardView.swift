@@ -115,6 +115,7 @@ class BoardView: UIView {
                 board!.generateBoardFrom(row: row, col: col)
                 board!.firstTap = false
             }
+            
             if board!.mineAt(row: row, col: col) {
                 board!.revealAllMines()
                 let viewController = appDelegate.window!.rootViewController as? ViewController
@@ -126,7 +127,13 @@ class BoardView: UIView {
                     let viewController = appDelegate.window!.rootViewController as? ViewController
                     viewController?.showGameWonAlert()
                 }
+                else if board!.isRevealedAt(row: row, col: col) {
+                    let viewController = appDelegate.window!.rootViewController as? ViewController
+                    board!.incrementMoves()
+                    viewController?.updateMoves(moves: board!.numMoves)
+                }
             }
+
             setNeedsDisplay()
         }
     }
