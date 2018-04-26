@@ -23,19 +23,23 @@ class ViewController: UIViewController {
     }
 
     @IBAction func newGameButtonPressed(_ sender: UIBarButtonItem) {
-        let appDelegate = UIApplication.shared.delegate as! AppDelegate
-        let board = appDelegate.board
-        
-        board!.startNewGame()
-        boardView.setNeedsDisplay()
+        let alert = UIAlertController(title: "New Game", message: "Would you like to start a new game?", preferredStyle: .alert)
+        let newGameAction = UIAlertAction(title: "New Game", style: .default) { (action) in
+            let board = self.appDelegate.board
+            board!.startNewGame()
+            self.boardView.setNeedsDisplay()
+        }
+        let cancelAction = UIAlertAction(title: "Cancel", style: .cancel)
+        alert.addAction(newGameAction)
+        alert.addAction(cancelAction)
+        self.present(alert, animated: true, completion: nil)
     }
-}
-
-extension ViewController {
+    
     func showGameOverAlert() {
         let alert = UIAlertController(title: "Game over", message: "You stepped on a mine!", preferredStyle: .alert)
         let newGameAction = UIAlertAction(title: "New Game", style: .default) { (action) in
-            self.appDelegate.board?.startNewGame()
+            let board = self.appDelegate.board
+            board!.startNewGame()
             self.boardView.setNeedsDisplay()
         }
         alert.addAction(newGameAction)
@@ -45,7 +49,8 @@ extension ViewController {
     func showGameWonAlert() {
         let alert = UIAlertController(title: "Congratulations!", message: "You have beaten the game!", preferredStyle: .alert)
         let newGameAction = UIAlertAction(title: "New Game", style: .default) { (action) in
-            self.appDelegate.board?.startNewGame()
+            let board = self.appDelegate.board
+            board!.startNewGame()
             self.boardView.setNeedsDisplay()
         }
         alert.addAction(newGameAction)
