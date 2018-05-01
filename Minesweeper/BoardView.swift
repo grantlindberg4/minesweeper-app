@@ -102,6 +102,7 @@ class BoardView: UIView {
     @IBAction func handleTap(_ sender: UIGestureRecognizer) {
         let appDelegate = UIApplication.shared.delegate as! AppDelegate
         let board = appDelegate.board
+        let viewController = appDelegate.window!.rootViewController as? ViewController
         
         let tapPoint = sender.location(in: self)
         let gridSize = (self.bounds.width < self.bounds.height) ? self.bounds.width : self.bounds.height
@@ -114,21 +115,19 @@ class BoardView: UIView {
             if board!.firstTap {
                 board!.generateBoardFrom(row: row, col: col)
                 board!.firstTap = false
+                viewController?.resetTimer()
             }
             
             if board!.mineAt(row: row, col: col) {
                 board!.revealAllMines()
-                let viewController = appDelegate.window!.rootViewController as? ViewController
                 viewController?.showGameOverAlert()
             }
             else {
                 board!.revealCellsAround(row: row, col: col)
                 if board!.wonGame() {
-                    let viewController = appDelegate.window!.rootViewController as? ViewController
                     viewController?.showGameWonAlert()
                 }
                 else if board!.isRevealedAt(row: row, col: col) {
-                    let viewController = appDelegate.window!.rootViewController as? ViewController
                     board!.incrementMoves()
                     viewController?.updateMoves(moves: board!.numMoves)
                 }

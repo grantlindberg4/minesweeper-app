@@ -13,6 +13,9 @@ class ViewController: UIViewController {
     @IBOutlet weak var movesLabel: UILabel!
     @IBOutlet weak var timeLabel: UILabel!
     
+    var counter = 0
+    var timer = Timer()
+    
     let appDelegate = UIApplication.shared.delegate as! AppDelegate
     
     override func viewDidLoad() {
@@ -30,8 +33,9 @@ class ViewController: UIViewController {
         let newGameAction = UIAlertAction(title: "New Game", style: .default) { (action) in
             let board = self.appDelegate.board
             board!.startNewGame()
-            board!.timer = nil
             self.updateMoves(moves: 0)
+            self.timer.invalidate()
+            self.resetTimer()
             self.boardView.setNeedsDisplay()
         }
         let cancelAction = UIAlertAction(title: "Cancel", style: .cancel)
@@ -41,12 +45,14 @@ class ViewController: UIViewController {
     }
     
     func showGameOverAlert() {
+        self.timer.invalidate()
+        self.updateMoves(moves: 0)
+
         let alert = UIAlertController(title: "Game over", message: "You stepped on a mine!", preferredStyle: .alert)
         let newGameAction = UIAlertAction(title: "New Game", style: .default) { (action) in
             let board = self.appDelegate.board
             board!.startNewGame()
-            board!.timer = nil
-            self.updateMoves(moves: 0)
+            self.resetTimer()
             self.boardView.setNeedsDisplay()
         }
         alert.addAction(newGameAction)
@@ -54,12 +60,14 @@ class ViewController: UIViewController {
     }
     
     func showGameWonAlert() {
+        self.timer.invalidate()
+        self.updateMoves(moves: 0)
+
         let alert = UIAlertController(title: "Congratulations!", message: "You have beaten the game!", preferredStyle: .alert)
         let newGameAction = UIAlertAction(title: "New Game", style: .default) { (action) in
             let board = self.appDelegate.board
             board!.startNewGame()
-            board!.timer = nil
-            self.updateMoves(moves: 0)
+            self.resetTimer()
             self.boardView.setNeedsDisplay()
         }
         alert.addAction(newGameAction)
@@ -71,9 +79,16 @@ class ViewController: UIViewController {
         self.movesLabel.sizeToFit()
     }
     
-    func updateTimeLabel(time: Int) {
-        self.timeLabel.text = "Time: \(time)"
+    @objc func updateTime() {
+        self.counter += 1
+        self.timeLabel.text = "\(self.counter)"
         self.timeLabel.sizeToFit()
+    }
+    
+    func resetTimer() {
+        self.timer.invalidate()
+        self.counter = 0
+        self.timer = Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(self.updateTime), userInfo: nil, repeats: true)
     }
 }
 

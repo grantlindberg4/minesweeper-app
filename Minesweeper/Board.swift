@@ -25,24 +25,18 @@ class Board {
     let numMines = 10
     var firstTap: Bool
     var numMoves: Int
-    var currGameDuration: Int
-    var timer: Timer?
     
     init(length: Int) {
         self.length = length
         self.cells = [[]]
         self.firstTap = true
         self.numMoves = 0
-        self.currGameDuration = 0
-        self.timer = Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(self.incrementTime), userInfo: nil, repeats: true)
     }
     
     func startNewGame() {
         cells = Array(repeating: Array(repeating: Cell(value: 0), count: self.length), count: self.length)
         self.firstTap = true
         self.numMoves = 0
-        self.currGameDuration = 0
-        self.timer = Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(self.incrementTime), userInfo: nil, repeats: true)
     }
     
     func generateBoardFrom(row: Int, col: Int) {
@@ -169,13 +163,5 @@ class Board {
     
     func incrementMoves() {
         self.numMoves += 1
-    }
-    
-    @objc func incrementTime() {
-        self.currGameDuration += 1
-
-        let appDelegate = UIApplication.shared.delegate as! AppDelegate
-        let viewController = appDelegate.window!.rootViewController as? ViewController
-        viewController?.updateTimeLabel(time: self.currGameDuration)
     }
 }
